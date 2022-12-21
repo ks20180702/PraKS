@@ -1,0 +1,37 @@
+@startuml
+class shinx {
+    + 根目录
+    + build文件夹()
+    + source文件夹()
+    - make.bat 文件()
+    - makefile 文件()
+}
+
+class build {
+    + 初创建为空，此为运行make空格html后
+    + doctrees文件夹，不重要，不解释()
+    + html文件夹()
+}
+
+class html {
+    + build下面的文件
+    + _sources文件夹(将主rst文件结构转成txt后的文档结构)
+    + _static文件夹(依据rst自动生成的js和css)
+    + _images()
+    + _plantuml(带_的都是自动生成的，不重要)
+    + index.html文件(网站入口文件)
+    + xxxxx.html文件(依据主rst生成的对应html文件)
+    + xxxxx文件夹(与主rst文件夹对应)
+}
+
+class source {
+    + 最重要的文件夹，即生成指定格式的文件来源
+    + conf.py文件，配置文件，例如扩展插件、主题、中英文等()
+    + index.rst文件，用户编写的内容()
+    + xxxx.rst文件和xxxx文件夹()
+}
+
+shinx <|-- build
+shinx <|-- source
+build <|-- html
+@enduml

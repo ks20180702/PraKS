@@ -1,0 +1,13 @@
+@startuml
+title 这是时序图生成测试
+actor 参与者1
+participant 参与者2
+participant 参与者3
+==工作==
+alt 周一到周五(左上角标题)
+参与者1 -> 参与者2
+note left:小记录
+参与者2 -> 参与者3:随便增加个注释
+参与者3 -> 参与者1:测试能不能反向指
+end
+@enduml

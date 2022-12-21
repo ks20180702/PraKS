@@ -1,7 +1,0 @@
-@startuml
-!theme spacelab
-class Example {
-  Theme spacelab
-}
-Alice -> Bob: test
-@enduml

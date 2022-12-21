@@ -25,7 +25,7 @@ if errorlevel 9009 (
 
 if "%1" == "" goto help
 
-java -jar _utils/plantuml.jar -charset UTF-8 -config plantuml.cfg -psvg -o ../uml_generated/ ./uml/*.uml
+java -jar _utils/plantuml.jar -charset UTF-8 -config plantuml.cfg -psvg -o ../uml_generated/ ./uml/*.puml
 
 %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 goto end

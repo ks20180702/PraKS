@@ -1,0 +1,19 @@
+' 活动图例子
+@startuml
+scale 2
+start
+:这个活动开始;
+:hahah;
+while (if ok?) is (yes)
+:print yes;
+endwhile
+fork
+:mail pp;
+:mail pp2;
+fork again
+:第二条路;
+fork again
+:第三条路;
+end fork
+stop
+@enduml
