@@ -40,7 +40,7 @@ fork again
 end fork
 :存储达到预警值的要素值;
 start
-->以下开始进行读取连续人的步骤
+->以下开始进行读取联系人的步骤;
 :发送短信、语音、弹窗时读取msg_detail_content消息;
 if (1080或则1090?) then (yes)
     :查询msg_detail_content获取[id,msg_type_id];
