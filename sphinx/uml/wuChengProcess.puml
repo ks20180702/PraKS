@@ -1,0 +1,89 @@
+@startuml
+scale 2
+start
+:达到预警值，生成对应的预警消息;
+:注意****,以下为甲方回复和讨论暂时确定
+1.弹窗基本上等同于发送给值班人员(存储值班人员电话)
+2.电话通知值班人员是指发送语音提醒
+3.发送给相应乡镇协理员和防指办(与乡镇相关)。
+4.某些类型如1010,它的弹窗和条件语音生成的消息是一样的;
+fork
+:1010的1、3、6小时天气联防(弹窗+条件语音)
+1020的1、3、6小时天气联防(短信)
+1030的风要素(小时级)(短信)
+1040的1、3小时强天气提醒(短信)
+1050的07-20天气通报(短信+弹窗+条件语音)
+1060能见度(短信+弹窗+立即语音)
+1080实况通报叫应。(短信)
+1090实况通报叫应(立即语音);
+:存储生成的预警消息到msg_detail_content表。;
+if (1080或则1090?) then (yes)
+    :需要记录叫应领导的级别
+    (与后面的分组有关);
+    :与乡镇相关;
+    :存储影响的乡镇到town_msg_detail表;
+else (no)
+    if (1060?) then (yes)
+        :与乡镇无关;
+        :弹窗、短信、立即语音都是发送给值班人员;
+    else (no)
+        :以上这些与乡镇相关;
+        :存储影响的乡镇到town_msg_detail表;
+    endif
+endif
+fork again
+:1070预警信号叫应(立即语音);
+:与乡镇无关;
+:查询台站发布的预警信号,生成对应预警信号的消息;
+:存储生成的预警消息到msg_detail_content表。;
+:存储预警名(暴雨、大风)和__预警信号等级__到risk_sign_datas;
+end fork
+:存储达到预警值的要素值;
+start
+->以下开始进行读取连续人的步骤
+:发送短信、语音、弹窗时读取msg_detail_content消息;
+if (1080或则1090?) then (yes)
+    :查询msg_detail_content获取[id,msg_type_id];
+    :同时获取叫应领导等级warn_level;
+else (no)
+    :查询msg_detail_content获取[id,msg_type_id];
+endif
+fork
+:消息类别msg_type_id
+1010
+1020
+1030
+1040
+1050
+1060;
+:查询出发送方式(短信、弹窗、语音);
+:由id获取影响乡镇的town_id;
+:由town_id读取group_relation_info分组信息表
+获取分组号reponse_group_id;
+fork again
+:1070;
+:查询出发送方式(短信、弹窗、语音);
+:由id查询risk_sign_datas预警信号记录表
+获取预警信号类别risk_type_id,预警信号等级risk_level;
+:读取group_relation_info分组信息表
+由1070+risk_type_id+risk_level
+获取分组号reponse_group_id;
+fork again
+:1080
+1090;
+:查询出发送方式(短信、弹窗、语音);
+:由id获取影响乡镇的town_id;
+    fork
+        :由town_id读取group_relation_info分组信息表
+        获取分组号reponse_group_id;
+    fork again
+        :叫应领导等级;
+        :读取group_relation_info分组信息表
+        由1080+叫应领导等级warn_level
+        获取分组号reponse_group_id;
+    end fork
+end fork
+:由分组号reponse_group_id查询group_detail获取分组中联系人的电话号码;
+:进行叫应;
+stop
+@enduml
